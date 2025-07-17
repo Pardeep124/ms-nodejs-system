@@ -10,7 +10,6 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-// Authentication Routes
 app.use('/api/auth', authRoutes);
 
 mongoose.connect(process.env.MONGODB_URI)
