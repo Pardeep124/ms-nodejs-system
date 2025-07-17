@@ -3,7 +3,7 @@ services:
   user-service:
     build: .
     ports:
-      - "5001:5001"
+      - "5002:5002"
     environment:
       - MONGODB_URI=mongodb://mongo:27017/userdb
     depends_on:

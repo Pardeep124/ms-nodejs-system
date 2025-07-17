@@ -32,5 +32,5 @@ Create a `.env` file:
 ```
 MONGODB_URI=mongodb://mongo:27017/authdb
 JWT_SECRET=supersecretkey
-PORT=5000
+PORT=5001
 ```

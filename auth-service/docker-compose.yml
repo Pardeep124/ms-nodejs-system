@@ -3,7 +3,7 @@ services:
   auth-service:
     build: .
     ports:
-      - "5000:5000"
+      - "5001:5001"
     environment:
       - MONGODB_URI=mongodb://mongo:27017/authdb
       - JWT_SECRET=supersecretkey

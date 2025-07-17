@@ -27,5 +27,5 @@ docker-compose up --build
 ## Env Variables
 ```
 MONGODB_URI=mongodb://mongo:27017/userdb
-PORT=5001
+PORT=5002
 ```
