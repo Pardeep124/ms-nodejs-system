@@ -36,8 +36,35 @@ const login = async (req, res) => {
   }
 };
 
-const validateToken = async (req, res) => {
-  return res.status(200).json({ message: 'Token is valid', user: req.user });
+const verifyToken = (req, res) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return res.status(200).json({ valid: true, user: decoded });
+  } catch (err) {
+    return res.status(403).json({ message: 'Invalid token' });
+  }
 };
 
-module.exports = { signup, login, validateToken };
+const getUserById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await User.findById(userId).select('-password');
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+module.exports = { signup, login, verifyToken, getUserById };
