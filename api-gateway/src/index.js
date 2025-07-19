@@ -9,18 +9,29 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(morgan('dev'));
 
+app.use((req, res, next) => {
+    console.log(`[Gateway] ${req.method} ${req.originalUrl}`);
+    next();
+});
+
 // Proxy to Auth Service
-app.use('/auth', createProxyMiddleware({
-    target: 'http://localhost:5001',
+app.use('/api/auth', createProxyMiddleware({
+    target: 'http://localhost:5001/api/auth',
     changeOrigin: true,
-    pathRewrite: { '^/auth': '' }
+    onError: (err, req, res) => {
+        console.error('Auth service proxy error:', err.message);
+        res.status(500).json({ error: 'Proxy error', detail: err.message });
+    }
 }));
 
 // Proxy to User Service
-app.use('/users', createProxyMiddleware({
-    target: 'http://localhost:5002',
+app.use('/api/users', createProxyMiddleware({
+    target: 'http://localhost:5002/api/users',
     changeOrigin: true,
-    pathRewrite: { '^/users': '' }
+    onError: (err, req, res) => {
+        console.error('User service proxy error:', err.message);
+        res.status(500).json({ error: 'Proxy error', detail: err.message });
+    }
 }));
 
 app.listen(PORT, () => {
